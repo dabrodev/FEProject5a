@@ -1,9 +1,12 @@
+
+"use strict";
+
 // Places - Hardcoded Data
 var myPlaces = [
 	{
 	name: "Rome",
 	lat: 41.902783, 
-	lng: 12.496366,
+	lng: 12.496366
 	},
 	{
 	name: "Venice",
@@ -27,9 +30,9 @@ var myPlaces = [
 	}
 ];	
 
-// Display Google Map
+// Initialize Google Map
 var map;
-var infoWindow;
+var infowindow;
 
 function initMap() {
 
@@ -41,99 +44,118 @@ function initMap() {
     };
 
     map = new google.maps.Map(mapContainer, mapOptions);
-    infoWindow = new google.maps.InfoWindow();
+
+    ko.applyBindings(new ViewModel());
 }; 
 
-// Keep center of the map during resizing
-google.maps.event.addDomListener(window, 'load', initMap() );
-google.maps.event.addDomListener(window, "resize", function() {
-    var center = map.getCenter();
-    google.maps.event.trigger(map, "resize");
-    map.setCenter(center); 
-});
-
-// Place - Model
+// Place Constructor - Model
 var Place = function(data) {
 
-	this.name = ko.observable(data.name);
-	this.lat = ko.observable(data.lat);
-	this.lng = ko.observable(data.lng);
-	this.wikiURL = ko.observable(data.wikiURL);
-	this.content = ko.observable(data.content);
+	this.name = data.name;
+	this.lat = data.lat;
+	this.lng = data.lng;
+	this.marker = data.marker;
 };
 
 // ViewModel
-var ViewModel = function() {
+function ViewModel()  {
 	
-    var self = this;
+	var self = this;
 	self.placesList = ko.observableArray([]);
+	infowindow = new google.maps.InfoWindow();
 
-	//Add my places to the placesList observable Array
-	myPlaces.forEach(function(data) {
-		self.placesList.push( new Place(data));
-	});
-  
-  // Render the markers and info window
-  	self.placesList().forEach(function(data) {
-		data.marker = new google.maps.Marker({
-		      position: {lat: data.lat(), lng: data.lng()},
-		      map: map,
-		      title: data.name()
-		});
-            
-      // Click handler for the marker
-		data.marker.addListener('click', function(){
-			data.marker.setAnimation(google.maps.Animation.BOUNCE);
+	// Markers and InfoWindow
+	myPlaces.forEach(function(placeItem) {
+
+	  	//Markers
+		var markerOptions = {
+		  map: map,
+		  position: {lat: placeItem.lat, lng: placeItem.lng},
+		  animation: google.maps.Animation.DROP,
+		};
+		placeItem.marker = new google.maps.Marker(markerOptions);
+
+	 	 //Create wiki content for infowindow for each location
+	    var wikiArticle = getWikiData(placeItem);
+	    placeItem.content = wikiArticle;
+
+		//Add listener for marker and open infowindow with content based on location
+	  	placeItem.marker.addListener('click', (function(markerClicked) { 
+			return function() {
+			
+			//add animation (bounce effect) for marker
+			placeItem.marker.setAnimation(google.maps.Animation.BOUNCE);
+			
+			//set animation time to 1 second
 			setTimeout(function () {
-			data.marker.setAnimation(null);
-			}, 1000); 
+			placeItem.marker.setAnimation(null);
+			}, 1000); 	
+			
+			//display infowindow
+			infowindow.setContent(placeItem.content);
+			infowindow.open(map, markerClicked);
+			}
+	  	})(placeItem.marker));
 
-  
-          
-			infoWindow.setContent('<div><h5>'+data.name()+'</h5></div><div>Address: '+data.lat()+'</div><div>Rating: '+data.lng()+'</div>');
-			infoWindow.open(map, data.marker);
-     	
-		});
-            
-    });
-    
-    // Binding the list of places with the click handler and the markers on the map
-    self.setPlace = function(data) {
-        google.maps.event.trigger(data.marker, 'click');
-    }; 
+	   //Add Places to the locationLists array
+	   	self.placesList.push(new Place(placeItem) );
+	});
 
-	// Filter the user input
+	//Binding the list of places with the click handler and the markers on the map
+	self.setPlace = function(placeItem) {
 
-	// Copy of places list.  We will use it filer the places bases on user input
+		google.maps.event.trigger(placeItem.marker, 'click');
+	}
+
+	//Get Wikipedia article based on place name
+	function getWikiData(placeItem) {
+
+		var wikiData;
+
+	    $.ajax({
+			url: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search='+placeItem.name+'&callback=wikiCallback',
+			dataType: 'jsonp',
+			success: function(response) {
+			wikiData = ( '<div>' +  '<h3>' + response[0] + '</h3>'
+							+ '<p>' + response[2] + '</p>'
+		    				+ '</div>'
+			  );
+			placeItem.content = wikiData;
+			return(wikiData)
+			},
+			error: function(response) {
+				wikiData = ('<div>' + '<p>' + 'Please check yout internet connection.' + '</p>' + '</div>');
+				placeItem.content = wikiData;
+				return(wikiData)
+			}
+	    });
+	}
+
+	//Filter the places
 	self.filteredPlaces = ko.observableArray([]);
 
-	myPlaces.forEach(function(data) {
-		self.filteredPlaces.push(new Place(data) );
+	myPlaces.forEach(function (placeItem) {
+		self.filteredPlaces.push(new Place(placeItem) );
 	});
 
-	// Variable to keep user input
-	self.userInput = ko.observable('');
+	self.query = ko.observable('');
 
-	self.filterPlaces = function(data)  {
+	self.filterPlaces = function(placeItem)  {
 
-		var userInput = self.userInput().toLowerCase();
+		var userInput = self.query().toLowerCase();
 		self.filteredPlaces.removeAll();
-		infoWindow.close();
+		infowindow.close();
 
-		self.placesList().forEach(function(data) {
-			data.marker.setVisible(false);
+		self.placesList().forEach(function(placeItem) {
+		placeItem.marker.setVisible(false);
 
-			if (data.name().toLowerCase().indexOf(userInput) !== -1)
-			self.filteredPlaces.push(data);
+		if (placeItem.name.toLowerCase().indexOf(userInput) !== -1)
+			self.filteredPlaces.push(placeItem);
 		});
 
-		//Function to make the markers visible for entered place names
-		self.filteredPlaces().forEach(function(data) {
-			data.marker.setVisible(true);
+		self.filteredPlaces().forEach(function(placeItem) {
+			placeItem.marker.setVisible(true);
 		});
+	};
 
-	}; //END of Filter Function
-
-}; //END of View Model
-
-ko.applyBindings(new ViewModel());
+};//END of ViewModel
