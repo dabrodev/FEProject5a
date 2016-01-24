@@ -27,7 +27,7 @@
           <ul class="nav navbar-nav">
            
             <li><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars"></i></a></li>
-            <li><input type="text" class="form-control" placeholder="enter place to filter"/></li>
+            <li><input type="text" class="form-control" placeholder="enter place to filter" data-bind="textInput: userInput, event: {keyup: filterPlaces}"/></li>
           </ul>
         </div>
 		  </div>
@@ -36,10 +36,10 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
                
-            <ul class="sidebar-nav" data-bind="foreach: placesList">
+            <ul class="sidebar-nav" data-bind="foreach: filteredPlaces">
             
                 <li>
-                    <a href="#" data-bind="text: name, click: $parent.setPlace"></a>
+                    <a href="#"  data-bind="text: name, click: $parent.setPlace"></a>
                 </li>
             </ul>
         </div>
