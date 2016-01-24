@@ -1,10 +1,83 @@
-html, body, #map {
+html, body, #wrapper {
   height: 100%;
   margin: 0px;
   padding: 0px;
-background-color: #ff0000;
+  background: #000;
+}
+
+#page-content-wrapper, 
+.container-fluid, 
+.row,
+.col-lg-12 {
+  height: 100%;
+}
+
+
+.navbar-brand {
+  padding-left: 30px;
+}
+
+.navbar-inverse {
+  background-color: #000;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+.navbar-nav {
+    float: left;
+    margin: 0;
+}
+
+.nav>li {
+    position: relative;
+    display: block;
+    float: left;
+}
+
+#menu-toggle {
+  width: 42px;
+  float: left;
+}
+
+.form-control {
+  margin-top: 7px;
+
+}
+
+.row {
+  margin: 0;
+}
+
+#wrapper {
+
 }
 
 #map {
+  
+     height: 100%;
+    width: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;  
+      -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+#sidebar-wrapper {
+  background-color: rgba(0,0,0,0.7);
+}
+
+@media(max-width: 320px) {
+  .form-control {
+    width: 100px;
+}
 }
