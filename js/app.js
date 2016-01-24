@@ -82,9 +82,9 @@ function ViewModel()  {
 		};
 		placeItem.marker = new google.maps.Marker(markerOptions);
 
-	 	 //Create wiki content for infowindow for each location
-	    var wikiArticle = getWikiData(placeItem);
-	    placeItem.content = wikiArticle;
+		//Create wiki content for infowindow for each location
+		var wikiArticle = getWikiData(placeItem);
+		placeItem.content = wikiArticle;
 
 		//Add listener for marker and open infowindow with content based on location
 	  	placeItem.marker.addListener('click', (function(markerClicked) { 
