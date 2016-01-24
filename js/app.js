@@ -1,7 +1,7 @@
 
 "use strict";
 
-// Places - Hardcoded Data
+//Places - Hardcoded Data
 var myPlaces = [
 	{
 	name: "Rome",
@@ -30,7 +30,7 @@ var myPlaces = [
 	}
 ];	
 
-// Initialize Google Map
+//Initialize Google Map
 var map;
 var infowindow;
 
@@ -45,10 +45,17 @@ function initMap() {
 
     map = new google.maps.Map(mapContainer, mapOptions);
 
+    //Center the map on risize
+	google.maps.event.addDomListener(window, "resize", function() {
+		var center = map.getCenter();
+		google.maps.event.trigger(map, "resize");
+		map.setCenter(center); 
+	});
+
     ko.applyBindings(new ViewModel());
 }; 
 
-// Place Constructor - Model
+//Place Constructor - Model
 var Place = function(data) {
 
 	this.name = data.name;
@@ -57,14 +64,14 @@ var Place = function(data) {
 	this.marker = data.marker;
 };
 
-// ViewModel
+//ViewModel
 function ViewModel()  {
 	
 	var self = this;
 	self.placesList = ko.observableArray([]);
 	infowindow = new google.maps.InfoWindow();
 
-	// Markers and InfoWindow
+	//Markers and InfoWindow
 	myPlaces.forEach(function(placeItem) {
 
 	  	//Markers
@@ -116,10 +123,10 @@ function ViewModel()  {
 			url: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search='+placeItem.name+'&callback=wikiCallback',
 			dataType: 'jsonp',
 			success: function(response) {
-			wikiData = ( '<div>' +  '<h3>' + response[0] + '</h3>'
-							+ '<p>' + response[2] + '</p>'
-		    				+ '</div>'
-			  );
+			wikiData = ('<div>' +  '<h3>' + response[0] + '</h3>'
+				+ '<p>' + response[2] + '</p>'
+				+ '</div>'
+			);
 			placeItem.content = wikiData;
 			return(wikiData)
 			},
