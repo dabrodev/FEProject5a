@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <title>Places to visit</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- Bootstrap Core CSS -->
+    <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- Font Awesome -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <!-- Custom CSS Sidebar -->
@@ -22,44 +22,39 @@
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 		  <div class="container-fluid">
 		    <div class="navbar-header">
-          <a class="navbar-brand" href="#">Places to Visit</a>
-      
-          <ul class="nav navbar-nav">
-           
-            <li><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars"></i></a></li>
-            <li><input type="text" class="form-control" placeholder="enter place to filter" data-bind="textInput: query, event: {keyup: filterPlaces}"/></li>
-          </ul>
-        </div>
+	      <a class="navbar-brand" href="#">Places to Visit</a>
+	      <ul class="nav navbar-nav">
+	        <li><a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars"></i></a></li>
+	        <li><input type="text" class="form-control" placeholder="enter place to filter" data-bind="textInput: query, event: {keyup: filterPlaces}"/></li>
+	      </ul>
+	    </div>
 		  </div>
 		</nav>
-                
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-               
-            <ul class="sidebar-nav" data-bind="foreach: filteredPlaces">
-            
-                <li>
-                    <a href="#"  data-bind="text: name, click: $parent.setPlace"></a>
-                </li>
-            </ul>
-        </div>
-        <!-- /#sidebar-wrapper -->
+	            
+		<!-- Sidebar -->
+		<div id="sidebar-wrapper">   
+		    <ul class="sidebar-nav" data-bind="foreach: filteredPlaces">
+		        <li>
+		            <a href="#" data-bind="text: name, click: $root.setPlace"></a>
+		        </li>
+		    </ul>
+		</div>
+		<!-- /#sidebar-wrapper -->
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                      
-                          <div id="map"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /#page-content-wrapper -->
+		<!-- Page Content -->
+		<div id="page-content-wrapper">
+		    <div class="container-fluid">
+		        <div class="row">
+		            <div class="col-lg-12">
+		              <div id="map"></div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		<!-- /#page-content-wrapper -->
 
-    </div>
-    <!-- /#wrapper -->
+	</div>
+	<!-- /#wrapper -->
 
 	<!-- jQuery -->
     <script src="js/lib/jquery.js"></script>
@@ -73,8 +68,8 @@
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
-
     </script>
+ 
     <!-- Google Map API -->
     <script  async defer src="https://maps.google.com/maps/api/js?v=3&callback=initMap" onerror="googleError()"></script>
      <!-- Knouckout JS -->
