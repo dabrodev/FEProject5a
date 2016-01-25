@@ -65,7 +65,7 @@ var Place = function(data) {
 };
 
 //ViewModel
-function ViewModel()  {
+var ViewModel = function() {
 	
 	var self = this;
 	self.placesList = ko.observableArray([]);
@@ -82,9 +82,8 @@ function ViewModel()  {
 		};
 		placeItem.marker = new google.maps.Marker(markerOptions);
 
-		//Create wiki content for infowindow for each location
-		var wikiArticle = getWikiData(placeItem);
-		placeItem.content = wikiArticle;
+		//Get Wiki data
+		getWikiData(placeItem);
 
 		//Add listener for marker and open infowindow with content based on location
 	  	placeItem.marker.addListener('click', (function(markerClicked) { 
@@ -93,10 +92,10 @@ function ViewModel()  {
 			//add animation (bounce effect) for marker
 			placeItem.marker.setAnimation(google.maps.Animation.BOUNCE);
 			
-			//set animation time to 1 second
+			//set animation time to one bounce sequence
 			setTimeout(function () {
 			placeItem.marker.setAnimation(null);
-			}, 1000); 	
+			}, 700); 	
 			
 			//display infowindow
 			infowindow.setContent(placeItem.content);
@@ -118,24 +117,24 @@ function ViewModel()  {
 	function getWikiData(placeItem) {
 
 		var wikiData;
+		var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search='+placeItem.name+'&callback=wikiCallback';
+	   	// Wikiperdia Error Handler
+		var wikiRequestTimeout = setTimeout(function() {
+    		$("#warning").addClass("alert-danger").text("Failed to load Wikipedia Data. Please try again later.");
+    		$("#warning").css("display", "block");
+    	}, 3000);
 
 	    $.ajax({
-			url: 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search='+placeItem.name+'&callback=wikiCallback',
+			url: wikiUrl,
 			dataType: 'jsonp',
 			success: function(response) {
-			wikiData = ('<div>' +  '<h3>' + response[0] + '</h3>'
-				+ '<p>' + response[2] + '</p>'
-				+ '</div>'
-			);
-			placeItem.content = wikiData;
-			return(wikiData)
-			},
-			error: function(response) {
-				wikiData = ('<div>' + '<p>' + 'Please check yout internet connection.' + '</p>' + '</div>');
-				placeItem.content = wikiData;
-				return(wikiData)
+				clearTimeout(wikiRequestTimeout);
+				placeItem.content = ('<div>' +  '<h3>' + response[0] + '</h3>'
+					+ '<p>' + response[2] + '</p>'
+					+ '</div>');
 			}
 	    });
+	   
 	}
 
 	//Filter the places
@@ -163,6 +162,6 @@ function ViewModel()  {
 		self.filteredPlaces().forEach(function(placeItem) {
 			placeItem.marker.setVisible(true);
 		});
-	};
+	}
 
 };//END of ViewModel

@@ -1,4 +1,8 @@
-#Places to Visit
+#Places to Visit - Web App
+
+##How to open the app
+* download the zip and unpack or clone the repository
+* to start open the index.html file in the browser
 
 ##Description
 

@@ -1,4 +1,6 @@
-html, body, #wrapper {
+html, 
+body, 
+#wrapper {
     height: 100%;
     margin: 0px;
     padding: 0px;
@@ -64,7 +66,12 @@ html, body, #wrapper {
     background-color: rgba(0,0,0,0.7);
 }
 
-@media(max-width: 320px) {
+#warning {
+  padding: 60px 50px 10px 20px;
+  display: none;
+}
+
+@media(max-width: 380px) {
     .form-control {
         width: 100px;
     }
