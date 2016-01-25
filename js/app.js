@@ -37,7 +37,7 @@ var map,
 function initMap() {
 
     var mapContainer = document.getElementById('map');
-    var initialLatLng = new google.maps.LatLng(myPlaces[0].lat,myPlaces[0].lng);	
+    var initialLatLng = new google.maps.LatLng(myPlaces[2].lat,myPlaces[2].lng);	
     var mapOptions = {
 		zoom: 6,
 		center: initialLatLng
