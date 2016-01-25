@@ -12,7 +12,7 @@
 	<link href="css/simple-sidebar.css" rel="stylesheet">
 	<!-- Custom CSS -->
 	<link href="css/style.css" rel="stylesheet" >
-	<!-- Google Map Load Error Handler -->
+	<!-- Google Map Error Handler -->
 	<script>
 		function googleError() {
 			$("#warning").addClass("alert-danger").text("Failed to load Google Map. Please try again later.");
@@ -63,10 +63,8 @@
 
 	<!-- jQuery -->
 	<script src="js/lib/jquery.js"></script>
-
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/lib/bootstrap.min.js"></script>
-
 	<!-- Menu Toggle Script -->
 	<script>
 		$("#menu-toggle").click(function(e) {
@@ -74,7 +72,6 @@
 		    $("#wrapper").toggleClass("toggled");
 		});
 	</script>
-
 	<!-- Google Map API -->
 	<script  async defer src="https://maps.google.com/maps/api/js?v=3&callback=initMap" onerror="googleError()"></script>
 	 <!-- Knouckout JS -->

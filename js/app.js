@@ -118,7 +118,7 @@ var ViewModel = function() {
 
 		var wikiData;
 		var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&format=json&search='+placeItem.name+'&callback=wikiCallback';
-	   	// Wikiperdia Error Handler
+	   	// Wikipedia Error Handler
 		var wikiRequestTimeout = setTimeout(function() {
     		$("#warning").addClass("alert-danger").text("Failed to load Wikipedia Data. Please try again later.");
     		$("#warning").css("display", "block");
