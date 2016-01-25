@@ -4,43 +4,43 @@
 //Places - Hardcoded Data
 var myPlaces = [
 	{
-	name: "Rome",
-	lat: 41.902783, 
-	lng: 12.496366
+		name: "Rome",
+		lat: 41.902783, 
+		lng: 12.496366
 	},
 	{
-	name: "Venice",
-	lat: 45.440847, 
-	lng: 12.315515
+		name: "Venice",
+		lat: 45.440847, 
+		lng: 12.315515
 	},
 	{
-	name: "Florence",
-	lat: 43.769560, 
-	lng: 11.255814
+		name: "Florence",
+		lat: 43.769560, 
+		lng: 11.255814
 	},
 	{
-	name: "Milan",
-	lat: 45.465422, 
-	lng: 9.185924
+		name: "Milan",
+		lat: 45.465422, 
+		lng: 9.185924
 	},
 	{
-	name: "Naples",
-	lat: 40.851775, 
-	lng: 14.268124
+		name: "Naples",
+		lat: 40.851775, 
+		lng: 14.268124
 	}
 ];	
 
 //Initialize Google Map
-var map;
-var infowindow;
+var map,
+	infowindow;
 
 function initMap() {
 
     var mapContainer = document.getElementById('map');
     var initialLatLng = new google.maps.LatLng(myPlaces[0].lat,myPlaces[0].lng);	
     var mapOptions = {
-    zoom: 6,
-    center: initialLatLng
+		zoom: 6,
+		center: initialLatLng
     };
 
     map = new google.maps.Map(mapContainer, mapOptions);
@@ -53,7 +53,7 @@ function initMap() {
 	});
 
     ko.applyBindings(new ViewModel());
-}; 
+}
 
 //Place Constructor - Model
 var Place = function(data) {
@@ -89,18 +89,18 @@ var ViewModel = function() {
 	  	placeItem.marker.addListener('click', (function(markerClicked) { 
 			return function() {
 			
-			//add animation (bounce effect) for marker
-			placeItem.marker.setAnimation(google.maps.Animation.BOUNCE);
-			
-			//set animation time to one bounce sequence
-			setTimeout(function () {
-			placeItem.marker.setAnimation(null);
-			}, 700); 	
-			
-			//display infowindow
-			infowindow.setContent(placeItem.content);
-			infowindow.open(map, markerClicked);
-			}
+				//add animation (bounce effect) for marker
+				placeItem.marker.setAnimation(google.maps.Animation.BOUNCE);
+				
+				//set animation time to one bounce sequence
+				setTimeout(function () {
+				placeItem.marker.setAnimation(null);
+				}, 700); 	
+				
+				//display infowindow
+				infowindow.setContent(placeItem.content);
+				infowindow.open(map, markerClicked);
+			};
 	  	})(placeItem.marker));
 
 	   //Add Places to the locationLists array
@@ -111,7 +111,7 @@ var ViewModel = function() {
 	self.setPlace = function(placeItem) {
 
 		google.maps.event.trigger(placeItem.marker, 'click');
-	}
+	};
 
 	//Get Wikipedia article based on place name
 	function getWikiData(placeItem) {
@@ -137,7 +137,7 @@ var ViewModel = function() {
 	   
 	}
 
-	//Filter the places
+	//Filter the places - Credit: http://codepen.io/prather-mcs/pen/KpjbNN?editors=001
 	self.filteredPlaces = ko.observableArray([]);
 
 	myPlaces.forEach(function (placeItem) {
@@ -162,6 +162,6 @@ var ViewModel = function() {
 		self.filteredPlaces().forEach(function(placeItem) {
 			placeItem.marker.setVisible(true);
 		});
-	}
+	};
 
-};//END of ViewModel
+}//END of ViewModel
